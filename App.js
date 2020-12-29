@@ -17,6 +17,8 @@ import trackCreateScreen from './src/screens/trackCreateScreen';
 import trackDetailScreen from './src/screens/trackDetailScreen';
 import trackListScreen from './src/screens/trackListScreen';
 
+import { Provider as AuthProvider } from "./src/Context/authContext";
+
 const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
     Signup : signupScreen,
@@ -32,4 +34,12 @@ const switchNavigator = createSwitchNavigator({
   })
 });
 
-export default createAppContainer(switchNavigator);
+const App = createAppContainer(switchNavigator);
+
+export default () => {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
