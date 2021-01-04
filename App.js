@@ -21,7 +21,10 @@ import { Provider as AuthProvider } from "./src/Context/authContext";
 
 import { setNavigator } from './src/navigationRef';
 
+import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
+
 const switchNavigator = createSwitchNavigator({
+  ResolveAuthScreen: ResolveAuthScreen,
   loginFlow: createStackNavigator({
     Signup : signupScreen,
     Signin : signinScreen
