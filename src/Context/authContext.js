@@ -42,7 +42,7 @@ const signin = (dispatch) => async ({email, password}) => {
         catch(err){
             dispatch({ type: 'add_error', payload: 'Error with signin'})
         }
-    };
+};
 
 const tryLocalSignin = (dispatch) => async () => {
     const token = await AsyncStorage.getItem('token');
