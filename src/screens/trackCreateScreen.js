@@ -1,44 +1,30 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useContext, useCallback} from 'react';
+import {Text, StyleSheet} from 'react-native';
 import Map from '../Components/Map';
-import { SafeAreaView } from 'react-navigation';
-import { requestPermissionsAsync, watchPositionAsync, Accuracy} from 'expo-location';
+import { SafeAreaView, withNavigationFocus } from 'react-navigation';
+import {Context as LocationContext} from '../Context/LocationContext';
+import useLoction from '../hooks/useLocation';
+import TrackForm from '../Components/TrackForm';
 
 import '../_mockLocation';
 
+const trackCreateScreen = ({ isFocused }) =>{
+    const {state, addLocation} = useContext(LocationContext);
 
-const trackCreateScreen = () =>{
+    const callback = useCallback( (location) => {
+            addLocation(location, state.recording)
+    }, [state.recording]);
 
-    const[err, setErr] = useState(null);
+    const [err] = useLoction(isFocused || state.recording, callback);
 
-    const startWatching = async () => {
-        try {
-            const { granted } = await requestPermissionsAsync();
-            if (!granted) 
-                throw new Error('Location permission not granted');
-
-            await watchPositionAsync({
-                accuracy: Accuracy.BestForNavigation,
-                timeInterval: 1000,
-                distanceInterval: 10
-            }, (location) => {
-                console.log(location);
-            });
-
-        } catch (e) {
-            setErr(e);
-        }
-    };
-
-    useEffect(() => {
-        startWatching();
-    }, []);
+    //console.log(isFocused);
 
     return (
         <SafeAreaView forceInset={{ top: 'always'}}>
             <Text style={{fontSize: 36, textAlign: 'center'}}>trackCreateScreen</Text>
             <Map />
             {err ? <Text>Please enable location services</Text>: null}
+            <TrackForm />
         </SafeAreaView>
     );
 
@@ -46,4 +32,4 @@ const trackCreateScreen = () =>{
 
 const styles = StyleSheet.create({});
 
-export default trackCreateScreen;
+export default withNavigationFocus(trackCreateScreen);
